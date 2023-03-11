@@ -14,11 +14,11 @@ async def get_events() -> List[Event]:
     return events
 
 
-@event_router.get("/{id}", response_model=Event)
+@event_router.get("/{event_id}", response_model=Event)
 async def get_an_event(event_id: int) -> Event:
     """Return an event by id."""
     for event in events:
-        if event.id == event_id:
+        if event["id"] == event_id:
             return event
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -33,21 +33,24 @@ async def create_event(event: Event = Body(...)) -> dict:
     return {"message": "Event created successfully."}
 
 
-@event_router.delete("/delete/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_an_event(event_id: int) -> dict:
+@event_router.delete(
+    "/delete/{event_id}",
+    status_code=status.HTTP_204_NO_CONTENT
+)
+async def delete_an_event(event_id: int):
     """Delete an event."""
     for event in events:
-        if event.id == event_id:
+        if event["id"] == event_id:
             events.remove(event)
-            return {"message": "Event deleted successfully"}
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="Event not found"
-    )
+            # return {"message": "Event deleted successfully"}
+    # raise HTTPException(
+    #     status_code=status.HTTP_404_NOT_FOUND,
+    #     detail="Event not found"
+    # )
 
 
 @event_router.delete("/all/delete", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_all() -> dict:
+async def delete_all():
     """Delete all events."""
     events.clear()
-    return {"message": "Events deleted successfully"}
+    # return {"message": "Events deleted successfully"}
