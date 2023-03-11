@@ -6,15 +6,15 @@ Event Planner is a fastapi application that provides a simple interface for even
 
 - planner/
   - apps/
-      -- __ini__.py
-      -- main.py
+      - __ini__.py
+      - main.py
   - models/
-      -- __init__.py
-      -- db_connects.py
+      - __init__.py
+      - db_connects.py
   - routes/
-      -- __init__.py
-      -- events.py
-      -- users.py
+      - __init__.py
+      - events.py
+      - users.py
   - schemas/
       - __init__.py
       - events.py
