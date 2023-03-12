@@ -4,7 +4,7 @@ from typing import List
 from fastapi import (
     APIRouter, Depends,
     HTTPException,
-    status, Request
+    status
 )
 from sqlmodel import select
 from models.db_connect import get_session

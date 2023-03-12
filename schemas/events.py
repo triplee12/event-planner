@@ -2,6 +2,7 @@
 """Event schemals for database models."""
 from datetime import date, time
 from typing import List, Optional
+from sqlalchemy import ForeignKey, Integer
 from sqlmodel import JSON, SQLModel, Field, Column, TIME, DATE
 
 
@@ -31,6 +32,15 @@ class Event(SQLModel, table=True):
     start_time: time = Field(sa_column=Column(TIME(timezone=True)))
     end_date: date = Field(sa_column=Column(DATE))
     location: str
+    owner_id: int = Field(
+        sa_column=Column(
+            Integer,
+            ForeignKey(
+                "user.id",
+                ondelete="CASCADE"
+            )
+        )
+    )
 
     class Config:
         """Event schema configuration."""

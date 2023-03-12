@@ -2,6 +2,7 @@
 """Database connection configurations."""
 from sqlmodel import SQLModel, create_engine, Session
 from schemas.events import Event
+from schemas.users import User
 
 database_file: str = "planner.db"
 database_connection_string: str = f"sqlite:///{database_file}"
