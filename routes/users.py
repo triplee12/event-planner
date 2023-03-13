@@ -3,9 +3,11 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlmodel import select
 from models.db_connect import get_session
+from auths.password_hasher import HashPassword
 from schemas.users import User, UserSignIn
 
 user_router: APIRouter = APIRouter(prefix="/users", tags=["Users"])
+hash_password: HashPassword = HashPassword()
 
 
 @user_router.post("/signup", status_code=status.HTTP_201_CREATED)
@@ -16,6 +18,9 @@ async def signup(data: User, session=Depends(get_session)):
             status_code=status.HTTP_409_CONFLICT,
             detail="User with email already exists."
         )
+    
+    hash_user_pwd: str = hash_password.create_hash(data.password)
+    data.password = hash_user_pwd
     session.add(data)
     session.commit()
     session.refresh(data)
@@ -34,7 +39,9 @@ async def login(user: UserSignIn, session=Depends(get_session)):
                 detail="User does not exist."
             )
 
-        if usr.password != user.password:
+        if usr.password != hash_password.verify_hash(
+            user.password, usr.password
+        ):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Invalid credentials"
