@@ -3,8 +3,8 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from models.db_connect import db_conn
-from routes import users, events
+from event_planner.models.db_connect import db_conn
+from event_planner.routes import users, events
 
 app: FastAPI = FastAPI()
 

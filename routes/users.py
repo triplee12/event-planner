@@ -3,10 +3,10 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select
-from models.db_connect import get_session
-from auths.password_hasher import HashPassword
-from auths.jwt_handler import create_access_token
-from schemas.users import User, TokenResponse
+from event_planner.models.db_connect import get_session
+from event_planner.auths.password_hasher import HashPassword
+from event_planner.auths.jwt_handler import create_access_token
+from event_planner.schemas.users import User, TokenResponse
 
 user_router: APIRouter = APIRouter(prefix="/users", tags=["Users"])
 hash_password: HashPassword = HashPassword()

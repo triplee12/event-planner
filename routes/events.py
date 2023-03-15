@@ -7,9 +7,9 @@ from fastapi import (
     status
 )
 from sqlmodel import select
-from auths.authenticate import authenticate
-from models.db_connect import get_session
-from schemas.events import Event, EventRes, EventUpdate
+from event_planner.auths.authenticate import authenticate
+from event_planner.models.db_connect import get_session
+from event_planner.schemas.events import Event, EventRes, EventUpdate
 
 event_router: APIRouter = APIRouter(prefix="/events", tags=["Events"])
 

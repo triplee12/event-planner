@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 from fastapi import HTTPException, status
 from jose import jwt, JWTError
-from models.db_connect import settings
+from event_planner.models.db_connect import settings
 
 
 def create_access_token(user: str) -> str:
