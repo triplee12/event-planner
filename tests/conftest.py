@@ -3,11 +3,9 @@
 import asyncio
 import httpx
 import pytest
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import SQLModel
 from event_planner.models.db_connect import db_conn, get_session, engine_url
 from event_planner.apps.main import app
-from event_planner.schemas.events import Event
-from event_planner.schemas.users import User
 
 
 @pytest.fixture(scope="session")
