@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 """User schema for the user database design."""
 from datetime import datetime, date
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.sql import func
-from sqlmodel import SQLModel, Field, Column, DateTime, JSON, Date, String
-from .events import Event
+from sqlmodel import SQLModel, Field, Column, DateTime, Date, String
 
 
 class User(SQLModel, table=True):
@@ -17,7 +16,6 @@ class User(SQLModel, table=True):
         last_name (str): last name of the user
         password (str): password of the user
         date_of_birth (date): birth date of the user
-        events (Optional[list]): list of events that the user created
     """
 
     id: int = Field(default=None, primary_key=True)
@@ -28,7 +26,6 @@ class User(SQLModel, table=True):
     last_name: str
     password: str
     date_of_birth: date = Field(sa_column=Column(Date))
-    events: Optional[List[Event]] = Field(sa_column=Column(JSON))
     created_at: Optional[datetime] = Field(
         sa_column=Column(
             DateTime(timezone=True),
@@ -46,29 +43,51 @@ class User(SQLModel, table=True):
                 "first_name": "John",
                 "last_name": "Doe",
                 "password": "strong!!!",
-                "date_of_birth": "2013-07-01",
-                "events": []
+                "date_of_birth": "2013-07-01"
             }
         }
 
 
-class UserSignIn(BaseModel):
-    """UserSignIn schema for the user login.
+class TokenResponse(BaseModel):
+    """TokenResponse schema for the user login.
 
     Args:
-        email (EmailStr): valid email address of the user
-        password (str): password of the user
+        access_token (str): valid email address of the user
+        token_type (str): password of the user
     """
 
-    email: EmailStr
-    password: str
+    access_token: str
+    token_type: str
 
     class Config:
         """User schema configuration for login."""
 
         schema_extra = {
             "example": {
-                "email": "fastapi@packt.com",
-                "password": "strong!!!"
+                "access_token": "f234a456s67899t9ap544i8",
+                "token_type": "Bearer"
             }
         }
+
+
+class UserRes(BaseModel):
+    """UserRes response schema for the user database design.
+
+    Args:
+        id (int): unique indentifier
+        email (EmailStr): valid email address of the user
+        first_name (str): first name of the user
+        last_name (str): last name of the user
+        date_of_birth (date): birth date of the user
+    """
+
+    id: int
+    email: str
+    first_name: str
+    last_name: str
+    date_of_birth: date
+
+    class Config:
+        """User response config."""
+
+        orm_mode: bool = True

@@ -1,8 +1,24 @@
 #!/usr/bin/python3
 """Database connection configurations."""
+from pydantic import BaseSettings
 from sqlmodel import SQLModel, create_engine, Session
 from schemas.events import Event
 from schemas.users import User
+
+
+class Setting(BaseSettings):
+    """Settings for events planning."""
+
+    SECRET_KEY: str
+    ALGORITHM: str
+
+    class Config:
+        """environment variable configuration setting."""
+
+        env_file: str = "./.env"
+
+
+settings: Setting = Setting()
 
 database_file: str = "planner.db"
 database_connection_string: str = f"sqlite:///{database_file}"

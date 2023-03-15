@@ -2,8 +2,11 @@
 """Event schemals for database models."""
 from datetime import date, time
 from typing import List, Optional
-from sqlalchemy import ForeignKey, Integer
-from sqlmodel import JSON, SQLModel, Field, Column, TIME, DATE
+from pydantic import BaseModel
+from sqlmodel import (
+    JSON, SQLModel, Field, Column,
+    TIME, DATE, Relationship, String, ForeignKey
+)
 
 
 class Event(SQLModel, table=True):
@@ -32,14 +35,19 @@ class Event(SQLModel, table=True):
     start_time: time = Field(sa_column=Column(TIME(timezone=True)))
     end_date: date = Field(sa_column=Column(DATE))
     location: str
-    owner_id: int = Field(
+    creator: Optional[int] = Field(
         sa_column=Column(
-            Integer,
+            String,
             ForeignKey(
-                "user.id",
+                "user.email",
                 ondelete="CASCADE"
-            )
+            ),
+            nullable=False
         )
+    )
+    owner = Relationship(
+        link_model="user",
+        sa_relationship="user"
     )
 
     class Config:
@@ -59,7 +67,8 @@ class Event(SQLModel, table=True):
                 "start_date": "2023-03-11",
                 "start_time": "12:00:00",
                 "end_date": "2023-03-11",
-                "location": "Google Meet"
+                "location": "Google Meet",
+                "creator": "Me Yul"
             }
         }
 
@@ -88,6 +97,7 @@ class EventUpdate(SQLModel):
     start_time: Optional[time]
     end_date: Optional[date]
     location: Optional[str]
+    creator: Optional[str]
 
     class Config:
         """Event schema configuration."""
@@ -105,6 +115,60 @@ class EventUpdate(SQLModel):
                 "start_date": "2023-03-11",
                 "start_time": "12:00:00",
                 "end_date": "2023-03-11",
-                "location": "Google Meet"
+                "location": "Google Meet",
+                "creator": "Me Yul"
+            }
+        }
+
+
+class EventRes(BaseModel):
+    """
+    Event response schema for database models design.
+
+    Args:
+        id (int): unique identifier for an event
+        title (str): title of the event
+        image (str): image of the event
+        description (str): description of the event
+        tags (list): list of event tags
+        start_date (Date): start date of the event
+        start_time (Time): start time of the event
+        end_date (Date): end date of the event
+        location (str): location of the event
+        creator (str): the event creator
+
+    """
+
+    id: int
+    title: str
+    image: str
+    description: str
+    tags: List[str]
+    start_date: date
+    start_time: time
+    end_date: date
+    location: str
+    creator: str
+
+    class Config:
+        """Event schema configuration."""
+
+        orm_mode: bool = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "title": "FastAPI Book Launch",
+                "image": "https://linktomyimage.com/image.png",
+                "description": """
+                    We will be discussing the contents of the FastAPI book in
+                    this event.
+                    Ensure to come with your own copy to win gifts!
+                """,
+                "tags": ["python", "fastapi", "book", "launch"],
+                "start_date": "2023-03-11",
+                "start_time": "12:00:00",
+                "end_date": "2023-03-11",
+                "location": "Google Meet",
+                "creator": "Me Yul"
             }
         }
