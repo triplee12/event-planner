@@ -35,7 +35,7 @@ class Event(SQLModel, table=True):
     start_time: time = Field(sa_column=Column(TIME(timezone=True)))
     end_date: date = Field(sa_column=Column(DATE))
     location: str
-    creator: Optional[int] = Field(
+    creator: Optional[str] = Field(
         sa_column=Column(
             String,
             ForeignKey(
