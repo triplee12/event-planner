@@ -2,13 +2,13 @@
 """Pytest fixture module config."""
 import asyncio
 import httpx
-import pytest
+import pytest_asyncio
 from sqlmodel import SQLModel
 from event_planner.models.db_connect import db_conn, get_session, engine_url
 from event_planner.apps.main import app
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 def event_loop():
     """Event loop for the test cases."""
     loop = asyncio.new_event_loop()
@@ -22,7 +22,7 @@ db_conn()
 get_session()
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session")
 async def test_client():
     """Create a default test client."""
     async with httpx.AsyncClient(
