@@ -1,0 +1,8 @@
+planner
+.env
+.git
+.coverage
+htmlcov
+.pytest_cache
+__pycache__
+*.db
